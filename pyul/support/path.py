@@ -26,8 +26,6 @@ import glob
 
 import errno
 
-from DTL.conf import settings
-
 __all__ = ['Path']
 
 #------------------------------------------------------------
