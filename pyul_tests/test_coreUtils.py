@@ -1,6 +1,6 @@
 import os
-import unittest
 
+from pyul.support import unittest
 from pyul.coreUtils import *
 
 class TestCaseCommon(unittest.TestCase):
