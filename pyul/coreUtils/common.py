@@ -3,7 +3,8 @@ import re
 import types
 from pathlib import Path
 
-__all__ = ['getUserTempDir','synthesize']
+__all__ = ['getClassName','wildcardToRe',
+           'getUserTempDir','synthesize']
 
 def getClassName(x):
     if not isinstance(x, basestring):

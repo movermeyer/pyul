@@ -36,8 +36,7 @@ Abstraction for different Python Qt bindings.
 Supported Python Qt bindings are PyQt4 and PySide.
 The Qt modules can be imported like this:
 
-from DTL.qt.QtCore import QObject
-from DTL.qt import QtGui, loadUi
+from pyuil.guiUtils.qt import QtCore, QtGui, loadUi
 
 The name of the selected binding is available in QT_BINDING.
 The version of the selected binding is available in QT_BINDING_VERSION.
@@ -52,13 +51,17 @@ A specific binding can be selected with a SELECT_QT_BINDING attribute on sys:
 """
 
 import sys
-from .binding_helper import loadUi, wrapinstance, QT_BINDING, QT_BINDING_MODULES, QT_BINDING_VERSION  # @UnusedImport
+try:
+    from .binding_helper import loadUi, wrapinstance, QT_BINDING, QT_BINDING_MODULES, QT_BINDING_VERSION  # @UnusedImport
 
-# register all binding modules as sub modules of this package (python_qt_binding) for easy importing
-for module_name, module in QT_BINDING_MODULES.items():
-    sys.modules[__name__ + '.' + module_name] = module
-    setattr(sys.modules[__name__], module_name, module)
-    del module_name
-    del module
+    # register all binding modules as sub modules of this package (python_qt_binding) for easy importing
+    for module_name, module in QT_BINDING_MODULES.items():
+        sys.modules[__name__ + '.' + module_name] = module
+        setattr(sys.modules[__name__], module_name, module)
+        del module_name
+        del module
+except ImportError, e:
+    from warnings import warn
+    warn(e.message, stacklevel=2)
 
 del sys

@@ -4,6 +4,8 @@ from pathlib import Path
 
 from pyul.coreUtils import getUserTempDir
 
+__all__ = ['download_file']
+
 def download_file(url, local_dir=None):
     url_file_name = Path(urlsplit(url)[2]).name
     if local_dir is None:

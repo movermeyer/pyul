@@ -4,11 +4,25 @@ import cProfile
 import pstats
 import datetime
 import inspect
+import warnings
 from functools import wraps
 from pathlib import Path
 from decorator import decorator
 from pyul import loggingUtils, threadUtils, coreUtils
 
+__all__ = ['cementArgFiller',
+           'PreAndPost','Safe',
+           'Timer','Profile',
+           'CommandTicker']
+
+@decorator
+def depreciated(f, *args, **kw):
+        warnings.warn_explicit(
+               "Call to deprecated function {}.".format(f.__name__),
+               category=DeprecationWarning,
+               filename=f.func_code.co_filename,
+               lineno=f.func_code.co_firstlineno + 1
+           )
 
 @decorator
 def cementArgFiller(f, *args, **kw):
@@ -199,8 +213,9 @@ class Profile(Safe):
     """A decorator which profiles a callable."""
     def __init__(self, func, sort='cumulative', strip_dirs=False):
         super(Profile, self).__init__(func)
-        base = coreUtils.getUserTempPath().joinpath('profile')
-        base.mkdir(parents=True)
+        base = coreUtils.getUserTempDir().joinpath('profile')
+        if not base.exists():
+            base.mkdir(parents=True)
         log_name = '{0}.{1}'.format(func.__module__,
                                     func.__name__)
         profile_path = base.joinpath(log_name + '.profile')
@@ -211,7 +226,7 @@ class Profile(Safe):
         coreUtils.synthesize(self, 'sort', sort)
         coreUtils.synthesize(self, 'strip_dirs', strip_dirs)
         coreUtils.synthesize(self, 'profile_path', str(profile_path))
-        coreUtils.synthesize(self, 'stats_path', str(stats_log))
+        coreUtils.synthesize(self, 'stats_path', str(stats_path))
         
 
         
