@@ -3,7 +3,7 @@ export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 pyenv shell
-pyenv virtualenv pyul_release#${BUILD_NUMBER}-${PYENV_VERSION}
+pyenv virtualenv pyul_release#${BUILD_NUMBER}-${PYENV_VERSION} -f
 pyenv activate "pyul_release#${BUILD_NUMBER}-${PYENV_VERSION}"
 
 pip install --index-url http://pypi.mapmyfitness.com/mmf/stable/+simple/ setuptools==0.9.8
