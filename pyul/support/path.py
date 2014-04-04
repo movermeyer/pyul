@@ -125,7 +125,7 @@ class Path(unicode):
         Join two path components, adding a separator character if
         needed.
         """
-        return self._next_class(self.module.joinpath(self, rel))
+        return self._next_class(self.module.join(self, rel))
     # Make the / operator work even when true division is enabled.
     __truediv__ = __div__        
     def __enter__(self):
@@ -240,7 +240,7 @@ class Path(unicode):
         character (os.sep) if needed.  Returns a new path
         object.
         """
-        return self._next_class(self.module.joinpath(self, *args))
+        return self._next_class(self.module.join(self, *args))
     #------------------------------------------------------------
     def listdir(self, pattern=None):
         """ D.listdir() -> List of items in this directory.
@@ -288,12 +288,12 @@ class Path(unicode):
         for root, dirs, files in os.walk(self, topdown=topdown):
             if return_files :
                 for name in files:
-                    next_path = self._next_class(os.path.joinpath(root, name))
+                    next_path = self._next_class(os.path.join(root, name))
                     if pattern is None or next_path.fnmatch(pattern):
                         yield next_path
             if return_dirs :
                 for name in dirs:
-                    next_path = self._next_class(os.path.joinpath(root, name))
+                    next_path = self._next_class(os.path.join(root, name))
                     if pattern is None or next_path.fnmatch(pattern):
                         yield next_path
     #------------------------------------------------------------
@@ -308,11 +308,11 @@ class Path(unicode):
         regexObj = re.compile(pattern)
         for root, dirs, files in os.walk(self, topdown=topdown):
             for name in files:
-                next_path = self._next_class(os.path.joinpath(root, name))
+                next_path = self._next_class(os.path.join(root, name))
                 if bool(regexObj.search(next_path)) == bool(not inclusive):
                     output_files.append(next_path)
             for name in dirs:
-                next_path = self._next_class(os.path.joinpath(root, name))
+                next_path = self._next_class(os.path.join(root, name))
                 if pattern is None or next_path.fnmatch(pattern):
                     output_dirs.append(next_path)
         return output_files, output_dirs
@@ -600,7 +600,7 @@ class Path(unicode):
             path = os.path.abspath(sys.argv[0])
             while 1:
                 path, tail = os.path.split(path)
-                if (os.path.isfile(os.path.joinpath(path,"ProjectRoot"))):
+                if (os.path.isfile(os.path.join(path,"ProjectRoot"))):
                     break
                 if (len(tail)==0):
                     path = ""
@@ -618,7 +618,7 @@ class Path(unicode):
         if rest == path:
             drive, path = os.path.splitdrive(path)
             drive = drive.upper()
-            return os.path.normpath(os.path.joinpath(drive, path))
+            return os.path.normpath(os.path.join(drive, path))
 
         if not last:
             return Path.getCaseSensativePath(rest) + os.sep
@@ -630,7 +630,7 @@ class Path(unicode):
         else:
             options = [last]
 
-        path = os.path.joinpath(Path.getCaseSensativePath(rest), options[0])
+        path = os.path.join(Path.getCaseSensativePath(rest), options[0])
         return path
 
     #------------------------------------------------------------
