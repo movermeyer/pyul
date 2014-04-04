@@ -7,7 +7,7 @@ pyul
 .. image:: https://pypip.in/d/pyul/badge.png
         :target: https://crate.io/packages/pyul/
 
-Python Utility Library - A library of utilities for python development
+Python Utility Library (pronounced: pile) - A library of utilities for python development
        
 Installation
 ------------
