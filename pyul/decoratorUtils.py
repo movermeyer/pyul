@@ -6,9 +6,9 @@ import datetime
 import inspect
 import warnings
 from functools import wraps
-from pathlib import Path
 from decorator import decorator
 from pyul import loggingUtils, threadUtils, coreUtils
+from pyul.support import Path
 
 __all__ = ['cementArgFiller',
            'PreAndPost','Safe',

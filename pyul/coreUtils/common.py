@@ -1,7 +1,7 @@
 import os
 import re
 import types
-from pathlib import Path
+from pyul.support import Path
 
 __all__ = ['getClassName','wildcardToRe',
            'getUserTempDir','synthesize']

@@ -6,7 +6,7 @@ import logging.handlers
 import sqlite3
 import threading
 import time
-from pathlib import Path
+from pyul.support import Path
 
 HUMANTIMEFORMAT = '%b %d %I:%M:%S %p'
 CODETIMEFORMAT = "%Y-%m-%d_%H:%M:%S"
