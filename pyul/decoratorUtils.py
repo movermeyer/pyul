@@ -17,12 +17,12 @@ __all__ = ['cementArgFiller',
 
 @decorator
 def depreciated(f, *args, **kw):
-        warnings.warn_explicit(
-               "Call to deprecated function {}.".format(f.__name__),
-               category=DeprecationWarning,
-               filename=f.func_code.co_filename,
-               lineno=f.func_code.co_firstlineno + 1
-           )
+    warnings.warn_explicit(
+        "Call to deprecated function {}.".format(f.__name__),
+        category=DeprecationWarning,
+        filename=f.func_code.co_filename,
+        lineno=f.func_code.co_firstlineno + 1
+    )
 
 @decorator
 def cementArgFiller(f, *args, **kw):

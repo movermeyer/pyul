@@ -3,12 +3,13 @@ __all__ = ['DotifyDict']
 #------------------------------------------------------------
 #------------------------------------------------------------
 class DotifyDict(dict):
-    def __init__(self, data):
+    def __init__(self, data=None):
+        data = data or {}
         for k, v in data.items():
             k = str(k)
-            try:
+            if isinstance(v, dict):
                 setattr(self, k, DotifyDict(v))
-            except:
+            else:
                 setattr(self, k, v)
     
     def __repr__(self):

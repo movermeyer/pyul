@@ -1,3 +1,5 @@
+from .event import Event
+
 __all__ = ['JITProxy']
 
 class JITProxy(object):
@@ -10,6 +12,7 @@ class JITProxy(object):
     
     @staticmethod
     def initObj(obj):
+        object.__getattribute__(obj, "_on_init")()
         oga = object.__getattribute__
         if oga(obj, "_obj") is None:
             object.__setattr__(obj,"_obj",
@@ -26,21 +29,28 @@ class JITProxy(object):
         object.__setattr__(self, "_args", args)
         object.__setattr__(self, "_kwds", kwds)
         object.__setattr__(self, "_obj", None)
+        object.__setattr__(self, "_on_init", Event())
     
     #
     # proxying (special cases)
     #
     def __getattribute__(self, name):
-        JITProxy.initObj(self)
-        return getattr(object.__getattribute__(self, "_obj"), name)
+        if name == '_on_init' and object.__getattribute__(self, "_obj") is None:
+            return object.__getattribute__(self, "_on_init")
+        else:
+            JITProxy.initObj(self)
+            return getattr(object.__getattribute__(self, "_obj"), name)
     def __getattr__(self, name):
         JITProxy.initObj(self)
         return getattr(object.__getattribute__(self, "_obj"), name)
     def __delattr__(self, name):
         delattr(object.__getattribute__(self, "_obj"), name)
     def __setattr__(self, name, value):
-        JITProxy.initObj(self)
-        setattr(object.__getattribute__(self, "_obj"), name, value)
+        if name == '_on_init' and object.__getattribute__(self, "_obj") is None:
+            return setattr(object.__getattribute__(self, "_on_init"), name, value)
+        else:        
+            JITProxy.initObj(self)
+            setattr(object.__getattribute__(self, "_obj"), name, value)
     
     def __nonzero__(self):
         JITProxy.initObj(self)

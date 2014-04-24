@@ -1,21 +1,24 @@
 import yaml
 import json
 import pprint
-from pyul import coreUtils, xmlUtils
-from pyul.support import Path
+from .common import synthesize, getUserTempDir
+from .compare import ComparableMixin
+from .dotifydict import DotifyDict
+from ..xmlUtils import parseToDict, unparseFromDict
+from ..support import Path
 
 __all__ = ['Config','YAMLConfig','JSONConfig','XMLConfig']   
 
-class Config(coreUtils.ComparableMixin, coreUtils.DotifyDict):
+class Config(ComparableMixin, DotifyDict):
     """
     A utility class for representing a format as a dictionary of nested data.
     """
 
-    def __init__(self, filepath):
+    def __init__(self, filepath=''):
         filepath = Path(filepath)
         if filepath.is_dir():
-            filepath = coreUtils.getUserTempDir().joinpath('temp.dat')
-        coreUtils.synthesize(self, 'filepath', filepath)
+            filepath = getUserTempDir().joinpath('temp.dat')
+        synthesize(self, 'filepath', filepath)
         self.read()
         
     def _cmpkey(self):
@@ -30,7 +33,7 @@ class Config(coreUtils.ComparableMixin, coreUtils.DotifyDict):
         output = {}
         ignore_keys = self._ignore_keys()
         for k, v in [(k,v) for k,v in data.items() if k not in ignore_keys]:
-            if isinstance(v, coreUtils.DotifyDict):
+            if isinstance(v, DotifyDict):
                 output[k] = self._get_data(v)
             else:
                 output[k] = v
@@ -38,9 +41,11 @@ class Config(coreUtils.ComparableMixin, coreUtils.DotifyDict):
                 
     def load(self, data):
         parsed_data = self.parse(data)
+        if not isinstance(parsed_data, dict):
+            raise ValueError('Unable to load data.  Not properly formated or parser failed to return a dict.')
         for k, v in parsed_data.items():
             try:
-                setattr(self, k, coreUtils.DotifyDict(v))
+                setattr(self, k, DotifyDict(v))
             except:
                 setattr(self, k, v)
         
@@ -51,11 +56,14 @@ class Config(coreUtils.ComparableMixin, coreUtils.DotifyDict):
             data = fh.read()
         self.load(data)
         
+    def dump(self):
+        return self.unparse(self._get_data())
+        
     def write(self):
         '''Writes the dict data to the file'''
         with open(str(self._filepath),'wb') as fh :
-            fh.write(self.unparse(self._get_data()))
-    
+            fh.write(self.dump())
+        
     def pprint(self):
         pprint.pprint(self._get_data())
     
@@ -72,10 +80,10 @@ class YAMLConfig(Config):
     Class for representing yaml data as a nested dictionary
     """
     def parse(self, data):
-        return yaml.load(data)
+        return yaml.safe_load(data)
     
     def unparse(self, data):
-        return yaml.dump(data, default_flow_style=False)
+        return yaml.safe_dump(data, default_flow_style=False)
     
 class JSONConfig(Config):
     """
@@ -94,10 +102,10 @@ class XMLConfig(Config):
     Class for representing xml data as a nested dictionary
     """
     def parse(self, data):
-        return xmlUtils.parseToDict(data)
+        return parseToDict(data)
     
     def unparse(self, data):
-        return xmlUtils.unparseFromDict(data)
+        return unparseFromDict(data)
             
 
 

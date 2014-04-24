@@ -40,7 +40,7 @@ class _DictSAXHandler(object):
                  item_callback=lambda *args: True,
                  xml_attribs=True,
                  attr_prefix='@',
-                 cdata_key='text',
+                 cdata_key='#text',
                  force_cdata=True,
                  cdata_separator='',
                  postprocessor=None,
