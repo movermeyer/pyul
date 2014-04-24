@@ -166,6 +166,7 @@ class Path(unicode):
     def isabs(self): return self.module.isabs(self)
     def exists(self): return self.module.exists(self)
     def isdir(self): return self.module.isdir(self)
+    def is_dir(self): return self.module.isdir(self)
     def isfile(self): return self.module.isfile(self)
     def islink(self): return self.module.islink(self)
     def ismount(self): return self.module.ismount(self)
