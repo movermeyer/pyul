@@ -10,7 +10,7 @@ from decorator import decorator
 from pyul import loggingUtils, threadUtils, coreUtils
 from pyul.support import Path
 
-__all__ = ['cementArgFiller',
+__all__ = ['depreciated','cementArgFiller',
            'PreAndPost','Safe',
            'Timer','Profile',
            'CommandTicker']
