@@ -36,5 +36,5 @@ class TestCaseDotifyDict(unittest.TestCase):
         self.assertEquals(self.dotifydict.one.two.four, 4)
         self.assertEquals(self.dotifydict.one, self.dotifydict.one)
         self.assertIn('two.three', (self.dotifydict.one))
-        self.assertEquals(str(self.dotifydict), "DotifyDict(datadict={'one': DotifyDict(datadict={'two': DotifyDict(datadict={'four': 4, 'three': 3})})})")
+        self.assertEquals(str(self.dotifydict), "{'one': {'two': {'four': 4, 'three': 3}}}")
         self.assertEquals(self.dotifydict.one.two, eval(str(self.dotifydict.one.two)))
