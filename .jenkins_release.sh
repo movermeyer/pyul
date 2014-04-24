@@ -5,4 +5,5 @@ pip install --index-url http://pypi.mapmyfitness.com/mmf/stable/+simple/ pip==1.
 pip install wheel
 
 # I cannot find anything wrong with calling register for each upload
-python setup.py register -r mmfpypi register -r rocktavious_pypi sdist bdist_wheel upload -r mmfpypi upload -r rocktavious_pypi
+python setup.py register -r mmfpypi sdist bdist_wheel upload -r mmfpypi
+python setup.py register -r rocktavious_pypi sdist bdist_wheel upload -r rocktavious_pypi
