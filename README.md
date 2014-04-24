@@ -1,5 +1,5 @@
 [![PyPi version](https://pypip.in/v/pyul/badge.png)](https://crate.io/packages/pyul/)
-[![Build Status](http://ci.mapmyfitness.com/buildStatus/icon?job=pyul_master_test)](http://ci.mapmyfitness.com/job/pyul_master_test/)
+[![Build Status](http://ci.mapmyfitness.com/buildStatus/icon?job=pyul_master)](http://ci.mapmyfitness.com/job/pyul_master/)
 [![PyPi downloads](https://pypip.in/d/pyul/badge.png)](https://crate.io/packages/pyul/)
 
 pyul
