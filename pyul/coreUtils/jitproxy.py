@@ -14,10 +14,10 @@ class JITProxy(object):
     def initObj(obj):
         oga = object.__getattribute__
         if oga(obj, "_obj") is None:
-            object.__getattribute__(obj, "_on_init")()
             object.__setattr__(obj,"_obj",
                                oga(obj, "_klass")(*oga(obj, "_args"),
                                                   **oga(obj, "_kwds")))
+            oga(obj, "_on_init")(oga(obj, "_obj"))
     
     def __init__(self, klass, *args, **kwds):
         """
