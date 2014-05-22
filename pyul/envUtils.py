@@ -1,68 +1,36 @@
-#from os import system, environ
-#import win32con
-#from win32gui import SendMessage
-#from _winreg import (
-    #CloseKey, OpenKey, QueryValueEx, SetValueEx,
-    #HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE,
-    #KEY_ALL_ACCESS, KEY_READ, REG_EXPAND_SZ, REG_SZ
-#)
+import os
+import virtualenv
 
-#def env_keys(user=True):
-    #if user:
-        #root = HKEY_CURRENT_USER
-        #subkey = 'Environment'
-    #else:
-        #root = HKEY_LOCAL_MACHINE
-        #subkey = r'SYSTEM\CurrentControlSet\Control\Session Manager\Environment'
-    #return root, subkey
+def get_venv_home():
+    return os.environ.get('VENV_HOME') or os.path.join(os.path.expanduser('~'),'.virtualenvs')
 
+def make_venv_home():
+    venv_home = get_venv_home()
+    os.makedirs(venv_home)
+    
+def get_env_home(name=None):
+    return os.path.join(get_venv_home(), name)
+    
+def get_paths(name):
+    _, lib_dir, inc_dir, bin_dir = virtualenv.path_locations(name)
+    
+    venv_home = get_venv_home()
+    home_dir = get_env_home(name)
+    lib_dir = os.path.join(venv_home, lib_dir)
+    pkg_dir = os.path.join(lib_dir, 'site-packages')
+    inc_dir = os.path.join(venv_home, inc_dir)
+    bin_dir = os.path.join(venv_home, bin_dir)        
+    
+    return home_dir, lib_dir, pkg_dir, inc_dir, bin_dir
 
-#def get_env(name, user=True):
-    #root, subkey = env_keys(user)
-    #key = OpenKey(root, subkey, 0, KEY_READ)
-    #try:
-        #value, _ = QueryValueEx(key, name)
-    #except WindowsError:
-        #return ''
-    #return value
+def get_activate_script(name):
+    home_dir, lib_dir, pkg_dir, inc_dir, bin_dir = get_paths(name)
+    return os.path.join(bin_dir, 'activate_this.py')
 
-
-#def set_env(name, value):
-    #key = OpenKey(HKEY_CURRENT_USER, 'Environment', 0, KEY_ALL_ACCESS)
-    #SetValueEx(key, name, 0, REG_EXPAND_SZ, value)
-    #CloseKey(key)
-    #SendMessage(
-        #win32con.HWND_BROADCAST, win32con.WM_SETTINGCHANGE, 0, 'Environment')
-
-
-#def remove(paths, value):
-    #while value in paths:
-        #paths.remove(value)
-
-
-#def unique(paths):
-    #unique = []
-    #for value in paths:
-        #if value not in unique:
-            #unique.append(value)
-    #return unique
-
-
-#def prepend_env(name, values):
-    #for value in values:
-        #paths = get_env(name).split(';')
-        #remove(paths, '')
-        #paths = unique(paths)
-        #remove(paths, value)
-        #paths.insert(0, value)
-        #set_env(name, ';'.join(paths))
-
-
-#def prepend_env_pathext(values):
-    #prepend_env('PathExt_User', values)
-    #pathext = ';'.join([
-        #get_env('PathExt_User'),
-        #get_env('PathExt', user=False)
-    #])
-    #set_env('PathExt', pathext)
-
+def exists( name, raise_error=False):
+    home_dir = get_env_home(name)
+    if not os.path.exists(home_dir):
+        if raise_error:
+            raise Exception('Unable to find virtualenv {0}'.format(home_dir))
+        return False
+    return True 
