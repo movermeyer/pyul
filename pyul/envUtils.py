@@ -108,6 +108,9 @@ def parse_requirements_file(requirements_file):
     with open(requirements_file, 'r') as file_handle:
         return parse_requirements(file_handle.read())
     
+def requires(package=None):
+    do_install(parse_requirements(package))
+    
 def suppress_pip_output():
     print "Suppressing pip install output!"
     def log_override(self, *args, **kwargs):
