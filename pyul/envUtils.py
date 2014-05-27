@@ -45,6 +45,14 @@ def exists( name, raise_error=False):
         return False
     return True
 
+def get_envs():
+    venvs = list()
+    venv_home = get_venv_home()
+    for directory in os.listdir(venv_home):
+        if os.path.exists(os.path.join(venv_home, directory, 'bin', 'activate')):
+            venvs.append(os.path.join(venv_home, directory))
+    return venvs
+
 def get_distribution(req):
     dist = None
     try:
@@ -92,7 +100,7 @@ def recursive_install(req, recursive=False):
         print "Requirement {0} conflicts with currently installed {1}".format(spec, dist)
     if recursive :
         for sub_req in get_dependencies(req):
-            install_requirement(sub_req)
+            recursive_install(sub_req)
         
 def do_install(requirements):
     for req in requirements:
