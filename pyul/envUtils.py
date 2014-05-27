@@ -100,16 +100,14 @@ def do_install(requirements):
     #We enable sub reqs the second time around so all top level requirements get installed first
     for req in requirements:
         recursive_install(req, True)
-        
-def do_install_from_file(requirements_file):
-    requirements = parse_requirements_file(requirements_file)
-    do_install(requirements)
+    
+def parse_requirements(requirements):
+    return list(pkg_resources.parse_requirements(requirements))
         
 def parse_requirements_file(requirements_file):
     with open(requirements_file, 'r') as file_handle:
-        reqs = pkg_resources.parse_requirements(file_handle.read())
-    return reqs
-            
+        return parse_requirements(file_handle.read())
+    
 def suppress_pip_output():
     print "Suppressing pip install output!"
     def log_override(self, *args, **kwargs):
