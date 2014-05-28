@@ -2,7 +2,6 @@ import os
 import virtualenv
 import pkg_resources
 import pip
-from copy import deepcopy
 
 PIP_INSTALL_ARGS = ['install',
                     '--index-url',
@@ -18,8 +17,16 @@ def make_venv_home():
     venv_home = get_venv_home()
     os.makedirs(venv_home)
     
-def get_env_home(name=None):
+def get_env_home(name):
     return os.path.join(get_venv_home(), name)
+
+def get_env_name(path):
+    venv_home = get_venv_home()
+    if not path.startswith(venv_home):
+        return None
+    name = os.path.basename(path)
+    exists(name, True)
+    return name
     
 def get_paths(name):
     _, lib_dir, inc_dir, bin_dir = virtualenv.path_locations(name)
@@ -32,10 +39,6 @@ def get_paths(name):
     bin_dir = os.path.join(venv_home, bin_dir)        
     
     return home_dir, lib_dir, pkg_dir, inc_dir, bin_dir
-
-def get_activate_script(name):
-    home_dir, lib_dir, pkg_dir, inc_dir, bin_dir = get_paths(name)
-    return os.path.join(bin_dir, 'activate_this.py')
 
 def exists( name, raise_error=False):
     home_dir = get_env_home(name)
@@ -52,6 +55,7 @@ def get_envs():
         if os.path.exists(os.path.join(venv_home, directory, 'bin', 'activate')):
             venvs.append(os.path.join(venv_home, directory))
     return venvs
+    
 
 def get_distribution(req):
     dist = None
@@ -100,7 +104,7 @@ def recursive_install(req, recursive=False):
         print "Requirement {0} conflicts with currently installed {1}".format(spec, dist)
     if recursive :
         for sub_req in get_dependencies(req):
-            recursive_install(sub_req)
+            recursive_install(sub_req, recursive)
         
 def do_install(requirements):
     for req in requirements:
