@@ -19,8 +19,14 @@ Usage Example
 __all__ = ['Enum']
 
 def Enum(*enumerated):
-    enums = dict(zip(enumerated, range(len(enumerated))))
-    enums["names"] = enumerated
+    #If only a dictionary is passed to enum it means we are making up our own values
+    #otherwise just enumerate the given list of keys
+    if len(enumerated) == 1 and isinstance(enumerated[0], dict):
+        enums = enumerated[0]
+        enums["names"] = enumerated[0].keys()
+    else:
+        enums = dict(zip(enumerated, range(len(enumerated))))
+        enums["names"] = enumerated
     return type('Enum', (), enums)
 
 if __name__ == "__main__":
