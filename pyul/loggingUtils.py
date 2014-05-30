@@ -3,7 +3,10 @@ import sys
 import StringIO
 import logging
 import logging.handlers
-import sqlite3
+try:
+    import sqlite3
+except:
+    pass
 import threading
 import time
 from pyul.support import Path
