@@ -47,8 +47,6 @@ def cementArgFiller(f, *args, **kw):
     return f(**compiled_kwds)
 
 
-#------------------------------------------------------------
-#------------------------------------------------------------
 class PreAndPost(object):
     __metaclass__ = loggingUtils.LoggingMetaclass
     def __init__(self, func):
@@ -73,8 +71,7 @@ class PreAndPost(object):
     def error(self, retval, *args, **kwds):
         self.log.exception("")
 
-#------------------------------------------------------------
-#------------------------------------------------------------
+
 class Safe(PreAndPost):
     def __init__(self, func):
         super(Safe, self).__init__(func)
@@ -103,8 +100,6 @@ class Safe(PreAndPost):
             self.log.exception("")
         
 
-#------------------------------------------------------------
-#------------------------------------------------------------
 class Timer(Safe):
     """A decorator which times a callable but also provides some timing functions
     to the func through itself being passed as a param to the function call"""
@@ -172,8 +167,6 @@ class Timer(Safe):
         self.stop()
 
 
-#------------------------------------------------------------
-#------------------------------------------------------------
 class CommandTicker(Safe):
     TICKS = ['[.  ]', '[.. ]', '[...]', '[ ..]', '[  .]', '[   ]']
     def __init__(self, func, *args, **kwds):
@@ -207,11 +200,9 @@ class CommandTicker(Safe):
         sys.stderr.flush()
         
 
-
-#------------------------------------------------------------
 class Profile(Safe):
     """A decorator which profiles a callable."""
-    def __init__(self, func, sort='cumulative', strip_dirs=False):
+    def __init__(self, func, sort='cumulative', strip_dirs=False, limit_exp=''):
         super(Profile, self).__init__(func)
         base = coreUtils.getUserTempDir().joinpath('profile')
         if not base.exists():
@@ -225,6 +216,7 @@ class Profile(Safe):
         coreUtils.synthesize(self, 'profile', cProfile.Profile())
         coreUtils.synthesize(self, 'sort', sort)
         coreUtils.synthesize(self, 'strip_dirs', strip_dirs)
+        coreUtils.synthesize(self, 'limit_exp', limit_exp)
         coreUtils.synthesize(self, 'profile_path', str(profile_path))
         coreUtils.synthesize(self, 'stats_path', str(stats_path))
         
@@ -244,5 +236,18 @@ class Profile(Safe):
         else:
             stats.sort_stats(self.sort)
         
-        stats.print_stats()
+        stats.print_stats(self.limit_exp)
         self.profile_path.unlink()
+        
+
+class Memoize(Safe):
+    def __init__(self, func):
+        super(Memoize, self).__init__(func)
+        self.memoized = dict()
+        
+    def call(self, *args):
+        try:
+            return self.memoized[args]
+        except KeyError:
+            self.memoized[args] = self.func(*args)
+            return self.memoized[args]
