@@ -5,9 +5,10 @@ from .common import synthesize, getUserTempDir
 from .compare import ComparableMixin
 from .dotifydict import DotifyDict
 from ..xmlUtils import parseToDict, unparseFromDict
+from ..importUtils import ImportModule
 from ..support import Path
 
-__all__ = ['Config','YAMLConfig','JSONConfig','XMLConfig']   
+__all__ = ['Config','YAMLConfig','JSONConfig','XMLConfig','PythonConfig']   
 
 class Config(ComparableMixin, DotifyDict):
     """
@@ -106,6 +107,21 @@ class XMLConfig(Config):
     
     def unparse(self, data):
         return unparseFromDict(data)
+    
+    
+class PythonConfig(Config):
+    def read(self):
+        mod = ImportModule(str(self._filepath))
+        self.load(mod.__dict__)
+    
+    def parse(self, data):
+        output = dict()
+        for name, value in data.items():
+            if name.startswith('__'):
+                continue
+            output[name.lower()] = value
+        return output
+    
             
 
 
