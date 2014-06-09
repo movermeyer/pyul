@@ -50,6 +50,15 @@ class DotifyDict(dict):
             return self.__getitem__(key)
         except KeyError:
             return default
+        
+    def update(self, u):
+        for k, v in u.iteritems():
+            if isinstance(v, DotifyDict):
+                d = getattr(self, k)
+                self[k] = d.update(v)
+            else:
+                self[k] = u[k]
+        return self
     
     def set_default(self, key, default):
         if key not in self:

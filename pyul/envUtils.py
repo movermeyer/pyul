@@ -101,7 +101,7 @@ def recursive_install(req, recursive=False):
             raise Exception('Unhandled Exit Code {0}'.format(exit_code))
     if has_conflict(req):
         dist = get_distribution(req)
-        print "Requirement {0} conflicts with currently installed {1}".format(spec, dist)
+        print "Requirement {0} conflicts with currently installed {1}".format(req, dist)
     if recursive :
         for sub_req in get_dependencies(req):
             recursive_install(sub_req, recursive)

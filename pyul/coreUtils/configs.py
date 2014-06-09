@@ -39,6 +39,17 @@ class Config(ComparableMixin, DotifyDict):
             else:
                 output[k] = v
         return output
+    
+    def update(self, u):
+        for k, v in u.iteritems():
+            if k in self._ignore_keys():
+                continue
+            if isinstance(v, DotifyDict):
+                d = getattr(self, k)
+                self[k] = d.update(v)
+            else:
+                self[k] = u[k]
+        return self
                 
     def load(self, data):
         parsed_data = self.parse(data)
