@@ -3,13 +3,6 @@ import virtualenv
 import pkg_resources
 import pip
 
-PIP_INSTALL_ARGS = ['install',
-                    '--index-url',
-                    'http://pypi.mapmyfitness.com/mmf/stable/+simple/']
-
-PIP_UNINSTALL_ARGS = ['uninstall',
-                      '--yes']
-
 def get_venv_home():
     return os.environ.get('VENV_HOME') or os.path.join(os.path.expanduser('~'),'.virtualenvs')
 
@@ -85,33 +78,70 @@ def get_dependencies(req):
     if dist is not None:
         requirements = dist.requires(req.extras)[::-1]    
     return requirements
-        
-def recursive_install(req, recursive=False):  
-    if get_distribution(req) is None:
-        print "pip install {0} ...".format(str(req)),
-        args = PIP_INSTALL_ARGS + [str(req)]
-        exit_code = do_pip_cmd(args)
-        if exit_code == 0:
-            print 'Success!'
-        elif exit_code == 1:
-            print "Failed to install"
-        elif exit_code == 2:
-            print "Has Conflicts"
+
+def get_download_cache():
+    pip_download_cache = os.environ.get('PIP_DOWNLOAD_CACHE',
+                                        os.path.expanduser('~/.pip/cache'))
+    try:
+        os.makedirs(pip_download_cache)
+    except:
+        pass
+    
+    return pip_download_cache
+
+def cached_download(req):
+    args = ['install',
+            '--download',
+            get_download_cache(),
+            str(req)]
+    exit_code = do_pip_cmd(args)
+    if exit_code == 0:
+        return True
+    elif exit_code == 1:
+        return False
+    else:
+        raise Exception('Unhandled Exit Code {0}'.format(exit_code))
+    
+
+def cached_install(req):
+    args = ['install',
+            '--no-index',
+            '--find-links',
+            'file://{0}'.format(get_download_cache()),
+            str(req)]
+    exit_code = do_pip_cmd(args)
+    if exit_code == 0:
+        pass
+    elif exit_code == 1:
+        if cached_download(req):
+            cached_install(req)
         else:
-            raise Exception('Unhandled Exit Code {0}'.format(exit_code))
+            pass
+    else:
+        raise Exception('Unhandled Exit Code {0}'.format(exit_code))    
+    
+def install(req, force=False):
+    if get_distribution(req) is None or force:
+        cached_install(req)
+    else:
+        if not has_conflict(req):
+            dist = get_distribution(req)
+            print "Requirement {0} already satisfied with {1}".format(req, dist)
     if has_conflict(req):
         dist = get_distribution(req)
         print "Requirement {0} conflicts with currently installed {1}".format(req, dist)
-    if recursive :
-        for sub_req in get_dependencies(req):
-            recursive_install(sub_req, recursive)
+        
+def recursive_install(req):  
+    for sub_req in get_dependencies(req):
+        install(sub_req)
+        recursive_install(sub_req)
         
 def do_install(requirements):
     for req in requirements:
-        recursive_install(req)
+        install(req)
     #We enable sub reqs the second time around so all top level requirements get installed first
     for req in requirements:
-        recursive_install(req, True)
+        recursive_install(req)
     
 def parse_requirements(requirements):
     return list(pkg_resources.parse_requirements(requirements))
@@ -131,7 +161,8 @@ def suppress_pip_output():
     
         
 if __name__ == '__main__':
-    requirements_file = '/Users/kyle.rockman/Projects/panama/build/pip-freeze-prod.txt'
-    suppress_pip_output()
-    do_install_from_file(requirements_file)
+    #requirements_file = '/Users/kyle.rockman/Projects/panama/build/pip-freeze-prod.txt'
+    #suppress_pip_output()
+    #do_install_from_file(requirements_file)
+    requires('django==1.6.5')
 
