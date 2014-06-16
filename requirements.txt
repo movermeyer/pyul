@@ -2,4 +2,3 @@ decorator
 pathlib
 unittest2
 pyyaml
-numpy

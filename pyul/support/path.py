@@ -167,7 +167,7 @@ class Path(unicode):
     def exists(self): return self.module.exists(self)
     def isdir(self): return self.module.isdir(self)
     def is_dir(self): return self.module.isdir(self)
-    def isfile(self): return self.module.isfile(self)
+    def is_file(self): return self.module.isfile(self)
     def islink(self): return self.module.islink(self)
     def ismount(self): return self.module.ismount(self)
     def samefile(self): return self.module.samefile(self)
@@ -282,7 +282,8 @@ class Path(unicode):
         whose names match the given pattern.  For example,
         ``d.files('*.pyc')``.
         """
-        return [p for p in self.listdir(pattern) if p.isfile()]
+        return [p for p in self.listdir(pattern) if p.is_file()]
+    iterdir = files
     #------------------------------------------------------------
     def walk(self, pattern=None, topdown=False, return_files=True, return_dirs=True):
         """Returns children files and dirs recusively as path objects"""
