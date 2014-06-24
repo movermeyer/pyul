@@ -29,7 +29,10 @@ class DotifyDict(dict):
     
     def __getitem__(self, key):
         if '.' not in key:
-            return super(DotifyDict, self).__getitem__(key)
+            try:
+                return super(DotifyDict, self).__getitem__(key)
+            except KeyError:
+                return None
         myKey, restOfKey = key.split('.', 1)
         target = super(DotifyDict, self).__getitem__(myKey)
         if not isinstance(target, DotifyDict):
