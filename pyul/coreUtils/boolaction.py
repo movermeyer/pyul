@@ -37,7 +37,7 @@ class BoolAction(argparse.Action):
             for negative_prefix in negative_prefixes:
                 self.negative_strings.add(negative_prefix + suffix)
                 strings.append(negative_prefix + suffix)
-        super(ConfigureAction, self).__init__(
+        super(BoolAction, self).__init__(
             option_strings=strings,
             dest=dest,
             nargs='?',
