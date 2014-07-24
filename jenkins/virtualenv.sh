@@ -2,12 +2,9 @@
 venv_name=.virtualenv
 virtualenv_activate=./${venv_name}/bin/activate
 
-# Check to see if virtualenv is installed
-if ! venv_cmd="$(type -p "virtualenv")" || [ -z "$venv_cmd" ]
-then
-  echo "Unable to find virtualenv command"
-  exit 1
-fi
+# Check to see if pip and virtualenv is installed
+command -v pip >/dev/null 2>&1 || { echo >&2 "Unable to find pip.  Aborting."; exit 1; }
+command -v virtualenv >/dev/null 2>&1 || { echo >&2 "Unable to find virtualenv.  Aborting."; exit 1; }
 
 # Validate the virtualenv and activate it
 if [[ ! -e $virtualenv_activate ]]
