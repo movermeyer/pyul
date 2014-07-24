@@ -9,10 +9,7 @@ venv_name=.virtualenv
 virtualenv_activate=./${venv_name}/bin/activate
 
 # Validate the virtualenv and activate it
-if [[ ! -e $virtualenv_activate ]]
-then
-  virtualenv $venv_name
-fi
+virtualenv $venv_name
 . ${virtualenv_activate}
 
 if [[ "$1" == "install" ]]
