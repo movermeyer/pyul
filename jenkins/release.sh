@@ -3,4 +3,4 @@ then
   RELEASE_TYPE=patch
 fi
 
-python setup.py tag --${RELEASE_TYPE} register -r mmfpypi sdist bdist_wheel upload -r mmfpypi
+python setup.py tag --${RELEASE_TYPE} register -r rocktaviouspypi sdist bdist_wheel upload -r rocktaviouspypi
