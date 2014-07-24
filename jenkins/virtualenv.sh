@@ -2,16 +2,11 @@
 venv_name=.virtualenv
 virtualenv_activate=./${venv_name}/bin/activate
 
-# Make sure we have the standard modules for working with packaging and virtualenvs
-if ! venv_cmd="$(type -p "pip")" || [ -z "$venv_cmd" ]
-then
-  curl --silent --show-error --retry 5 https://raw.github.com/pypa/pip/master/contrib/get-pip.py | python
-fi
-
-# Only try to install virtualenv if it isn't already installed
+# Check to see if virtualenv is installed
 if ! venv_cmd="$(type -p "virtualenv")" || [ -z "$venv_cmd" ]
 then
-  pip install --upgrade virtualenv
+  echo "Unable to find virtualenv command"
+  exit
 fi
 
 # Validate the virtualenv and activate it
