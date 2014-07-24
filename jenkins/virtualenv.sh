@@ -6,7 +6,7 @@ virtualenv_activate=./${venv_name}/bin/activate
 if ! venv_cmd="$(type -p "virtualenv")" || [ -z "$venv_cmd" ]
 then
   echo "Unable to find virtualenv command"
-  exit
+  exit 1
 fi
 
 # Validate the virtualenv and activate it
