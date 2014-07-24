@@ -14,9 +14,7 @@ virtualenv $venv_name
 
 if [[ "$1" == "install" ]]
 then
-  pip install -r requirements.txt
   pip install --upgrade pyul
 else
-  pip install --upgrade -r dev-requirements.txt
-  python setup.py develop
+  python setup.py develop  
 fi
