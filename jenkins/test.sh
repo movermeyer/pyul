@@ -1,3 +1,3 @@
 #!/bin/bash
-pip install test-requirements.txt
+pip install -r test-requirements.txt
 python setup.py nosetests
