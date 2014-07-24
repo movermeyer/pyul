@@ -16,5 +16,5 @@ if [[ "$1" == "install" ]]
 then
   pip install --upgrade pyul
 else
-  python setup.py develop  
+  python setup.py develop
 fi
