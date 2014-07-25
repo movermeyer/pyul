@@ -1,7 +1,7 @@
 import yaml
 import json
 import pprint
-from .common import synthesize, getUserTempDir
+from .common import synthesize, get_user_temp_dir
 from .compare import ComparableMixin
 from .dotifydict import DotifyDict
 from ..xmlUtils import parseToDict, unparseFromDict
@@ -18,7 +18,7 @@ class Config(ComparableMixin, DotifyDict):
     def __init__(self, filepath=''):
         filepath = Path(filepath)
         if filepath.is_dir():
-            filepath = getUserTempDir().joinpath('temp.dat')
+            filepath = get_user_temp_dir().joinpath('temp.dat')
         synthesize(self, 'filepath', filepath)
         self.read()
         

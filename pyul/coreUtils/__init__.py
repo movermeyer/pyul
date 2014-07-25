@@ -6,3 +6,4 @@ from .event import *
 from .jitproxy import *
 from .configs import *
 from .boolaction import *
+from .filefinder import *

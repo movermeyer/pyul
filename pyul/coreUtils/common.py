@@ -3,10 +3,12 @@ import re
 import types
 from pyul.support import Path
 
-__all__ = ['getClassName','wildcardToRe',
-           'getUserTempDir','synthesize']
+__all__ = ['get_class_name','wildcard_to_re',
+           'get_user_temp_dir','synthesize',
+           'is_descriptor','is_dunder','is_sunder',
+           'split_path']
 
-def getClassName(x):
+def get_class_name(x):
     if not isinstance(x, basestring):
         if type(x) in [types.FunctionType, types.TypeType, types.ModuleType] :
             return x.__name__
@@ -15,7 +17,7 @@ def getClassName(x):
     else:
         return x
 
-def wildcardToRe(pattern):
+def wildcard_to_re(pattern):
     """Translate a wildcard pattern to a regular expression"""
     i, n = 0, len(pattern)
     res = '(?i)' #case insensitive re
@@ -30,7 +32,7 @@ def wildcardToRe(pattern):
             res = res + re.escape(c)
     return res + "$"
 
-def getUserTempDir(temp_dirname='.tmp'):
+def get_user_temp_dir(temp_dirname='.tmp'):
     """
     Returns a path to a temp directory within the user folder
     
@@ -112,3 +114,18 @@ def is_sunder(name):
             name[1:2] != '_' and
             name[-2:-1] != '_' and
             len(name) > 2)
+
+def split_path(filepath):
+    """Returns (drive, parts) of the given filepath"""
+    parts = []
+    drive, _ = os.path.splitdrive(filepath)
+    while True:
+        newpath, tail = os.path.split(filepath)
+        if newpath == filepath:
+            assert not tail
+            if filepath: parts.append(filepath)
+            break
+        parts.append(tail)
+        filepath = newpath
+    parts.reverse()
+    return drive, parts
