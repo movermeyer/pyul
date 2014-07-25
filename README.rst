@@ -1,11 +1,11 @@
-|Badge|_|Status|_|Downloads|_
+|Status|_ |Badge|_ |Downloads|_
 
 .. |Badge| image:: https://pypip.in/v/pyul/badge.png
 .. _Badge: https://crate.io/packages/pyul/
 .. |Status| image:: http://jenkins.rocktavious.com/buildStatus/icon?job=pyul-master
 .. _Status: http://jenkins.rocktavious.com/job/pyul_master/
 .. |Downloads| image:: https://pypip.in/d/pyul/badge.png
-.. Downloads: https://crate.io/packages/pyul/
+.. _Downloads: https://crate.io/packages/pyul/
 
 pyul
 ====
