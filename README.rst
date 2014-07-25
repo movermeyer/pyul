@@ -1,6 +1,11 @@
-[![PyPi version](https://pypip.in/v/pyul/badge.png)](https://crate.io/packages/pyul/)
-[![Build Status](http://jenkins.rocktavious.com/buildStatus/icon?job=pyul_master)](http://jenkins.rocktavious.com/job/pyul_master/)
-[![PyPi downloads](https://pypip.in/d/pyul/badge.png)](https://crate.io/packages/pyul/)
+|Badge|_|Status|_|Downloads|_
+
+.. |Badge| image:: https://pypip.in/v/pyul/badge.png
+.. _Badge: https://crate.io/packages/pyul/
+.. |Status| image:: http://jenkins.rocktavious.com/buildStatus/icon?job=pyul-master
+.. _Status: http://jenkins.rocktavious.com/job/pyul_master/
+.. |Downloads| image:: https://pypip.in/d/pyul/badge.png
+.. Downloads: https://crate.io/packages/pyul/
 
 pyul
 ====
