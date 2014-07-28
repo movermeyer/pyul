@@ -204,7 +204,7 @@ class Profile(Safe):
     """A decorator which profiles a callable."""
     def __init__(self, func, sort='cumulative', strip_dirs=False, limit_exp=''):
         super(Profile, self).__init__(func)
-        base = coreUtils.getUserTempDir().joinpath('profile')
+        base = coreUtils.get_user_temp_dir().joinpath('profile')
         if not base.exists():
             base.mkdir(parents=True)
         log_name = '{0}.{1}'.format(func.__module__,
