@@ -8,11 +8,11 @@ class TestCaseCommon(unittest.TestCase):
     def setUp(self):
         synthesize(self, 'mySynthesizeVar', None)
     
-    def test_wildcardToRe(self):
-        self.assertEquals(wildcardToRe('c:\CIG\main\*.*'),
+    def test_wildcard_to_re(self):
+        self.assertEquals(wildcard_to_re('c:\CIG\main\*.*'),
                           '(?i)c\\:\\\\CIG\\\\main\\\\[^\\\\]*\\.[^\\\\]*$')
-        self.assertEquals(wildcardToRe('c:\CIG\main\*.*'),
-                          wildcardToRe('c:/CIG/main/*.*'))
+        self.assertEquals(wildcard_to_re('c:\CIG\main\*.*'),
+                          wildcard_to_re('c:/CIG/main/*.*'))
     
     def test_synthesize(self):
         self.assertIn('_mySynthesizeVar', self.__dict__)
@@ -22,8 +22,8 @@ class TestCaseCommon(unittest.TestCase):
         
         self.assertEqual(self.getMySynthesizeVar(), self.mySynthesizeVar)
         
-    def test_getClassName(self):
-        self.assertEqual(getClassName(self), 'TestCaseCommon')
+    def test_get_class_name(self):
+        self.assertEqual(get_class_name(self), 'TestCaseCommon')
 
 class TestCaseDotifyDict(unittest.TestCase):
     
