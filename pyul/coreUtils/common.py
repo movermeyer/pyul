@@ -6,7 +6,7 @@ from pyul.support import Path
 __all__ = ['get_class_name','wildcard_to_re',
            'get_user_temp_dir','synthesize',
            'is_descriptor','is_dunder','is_sunder',
-           'split_path']
+           'split_path','block_indent']
 
 def get_class_name(x):
     if not isinstance(x, basestring):
