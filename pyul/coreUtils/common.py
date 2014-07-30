@@ -129,3 +129,7 @@ def split_path(filepath):
         filepath = newpath
     parts.reverse()
     return drive, parts
+
+def block_indent(string, spaces=4):
+    """Returns the given multiline string indented by the number of spaces given"""
+    return "\n".join((spaces * " ") + i for i in string.splitlines())
