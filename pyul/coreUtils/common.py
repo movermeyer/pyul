@@ -1,12 +1,13 @@
 import os
 import re
 import types
+import string
 from pyul.support import Path
 
 __all__ = ['get_class_name','wildcard_to_re',
            'get_user_temp_dir','synthesize',
            'is_descriptor','is_dunder','is_sunder',
-           'split_path','block_indent']
+           'split_path','block_indent','safe_format']
 
 def get_class_name(x):
     if not isinstance(x, basestring):
@@ -133,3 +134,14 @@ def split_path(filepath):
 def block_indent(string, spaces=4):
     """Returns the given multiline string indented by the number of spaces given"""
     return "\n".join((spaces * " ") + i for i in string.splitlines())
+
+
+
+
+class SafeDict(dict):
+    def __missing__(self, key):
+        return '{' + key + '}'
+    
+FORMATTER = string.Formatter()
+def safe_format(string, *args, **kwargs):
+    return FORMATTER.vformat(string, args, SafeDict(**kwargs))
