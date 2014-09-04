@@ -10,7 +10,7 @@ fi
 . ${virtualenv_activate}
 
 pip install -r dev-requirements.txt
-if [[ ! -e "./setup.py" ]]
+if [[ -e "./setup.py" ]]
 then
-    python setup.py develop
+    python setup.py develop --no-deps
 fi
