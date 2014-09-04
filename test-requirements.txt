@@ -7,7 +7,6 @@ httpretty
 httmock
 nose
 nosexcover
-unittest2
 
 # Linting
 flake8
