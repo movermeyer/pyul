@@ -1,12 +1,4 @@
-# Runtime requirements
 --requirement requirements.txt
 --requirement test-requirements.txt
-
-# Distribution
-wheel
-devpi
-
-# Documentation
-Sphinx
-Sphinx-PyPI-upload
-
+--requirement doc-requirements.txt
+--requirement release-requirements.txt

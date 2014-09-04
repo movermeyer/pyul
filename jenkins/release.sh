@@ -2,5 +2,9 @@ if [[ -z "${RELEASE_TYPE}" ]]
 then 
   RELEASE_TYPE=patch
 fi
-pip install wheel
-python setup.py tag --${RELEASE_TYPE} register -r rocktaviouspypi sdist bdist_wheel upload -r rocktaviouspypi
+if [[ -z "${PYPI_NAME}" ]]
+then 
+  PYPI_NAME=rocktaviouspypi
+fi
+
+python setup.py tag --${RELEASE_TYPE} register -r ${PYPI_NAME} sdist bdist_egg bdist_wheel upload -r ${PYPI_NAME}

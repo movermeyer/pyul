@@ -58,3 +58,4 @@ coverage_report/
 AUTHORS
 ChangeLog
 .virtualenv/
+.DS_Store

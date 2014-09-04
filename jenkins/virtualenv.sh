@@ -1,20 +1,16 @@
 #!/bin/bash
-# Check to see if pip and virtualenv is installed
-hash pip 2>/dev/null || { echo >&2 "I require foo but it's not installed.  Aborting."; exit 1; }
-
-hash pip 2>/dev/null || { echo >&2 "Unable to find pip.  Aborting."; exit 1; }
-hash virtualenv 2>/dev/null || { echo >&2 "Unable to find virtualenv.  Aborting."; exit 1; }
-
 venv_name=.virtualenv
 virtualenv_activate=./${venv_name}/bin/activate
 
 # Validate the virtualenv and activate it
-virtualenv $venv_name
+if [[ ! -e $virtualenv_activate ]]
+then
+  virtualenv $venv_name
+fi
 . ${virtualenv_activate}
 
-if [[ "$1" == "install" ]]
+pip install -r dev-requirements.txt
+if [[ ! -e "./setup.py" ]]
 then
-  pip install --upgrade pyul
-else
-  python setup.py develop
+    python setup.py develop
 fi
