@@ -9,7 +9,7 @@ then
 fi
 . ${virtualenv_activate}
 
-pip install -r dev-requirements.txt
+pip install -r dev-requirements.txt --find-links="./"
 if [[ -e "./setup.py" ]]
 then
     python setup.py develop --no-deps
