@@ -1,8 +1,8 @@
-if [[ -z "${RELEASE_TYPE}" ]]
+if [[ "${RELEASE_TYPE}" == "" ]]
 then 
   RELEASE_TYPE=patch
 fi
-if [[ -z "${PYPI_NAME}" ]]
+if [[ "${PYPI_NAME}" == "" ]]
 then 
   PYPI_NAME=rocktaviouspypi
 fi
