@@ -2,3 +2,4 @@
 --requirement test-requirements.txt
 --requirement doc-requirements.txt
 --requirement release-requirements.txt
+pbr-0.11.0.dev19.gb0cedad.tar.gz
