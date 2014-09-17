@@ -9,8 +9,6 @@ then
 fi
 . ${virtualenv_activate}
 
-pip install pbr==0.11.0.dev19.gb0cedad --find-links "./"
-pip install -r dev-requirements.txt --find-links "./"
 if [[ -e "./setup.py" ]]
 then
     python setup.py develop
