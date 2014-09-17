@@ -1,25 +1,14 @@
 import sys
 from setuptools import setup
 from subprocess import call
-from setuptools.command.install import install as _install
-from setuptools.command.develop import develop as _develop
 
-class install(_install):
-    def run(self):
-        call(['pip install -r requirements.txt'], shell=True)
-        #_install.run(self)
-        
-class develop(_develop):
-    def run(self):
-        call(['pip install -r dev-requirements.txt'], shell=True)
-        #_develop.run(self)
+try:
+    from pbr import util
+    setup(**util.cfg_to_args())
+except ImportError:
+    #If PBR isn't installed, then install it from the local egg and redo the python setup.py call
+    call(['easy_install ./pbr-0.11.0.dev32.g9f160d5-py2.7.egg'], shell=True)
+    call([' '.join(['python'] + sys.argv)], shell=True)
 
-kw = {}
-if sys.version_info >= (3,):
-    kw['use_2to3'] = True
 
-setup(cmdclass={'install': install,
-                'develop': develop},
-      setup_requires=['pbr'],
-      pbr=True,
-      **kw)
+
