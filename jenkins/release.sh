@@ -1,6 +1,7 @@
 #!/bin/bash
 venv_name=.virtualenv_release
 virtualenv_activate=./${venv_name}/bin/activate
+rm -rvf ./${venv_name}
 
 # Validate the virtualenv and activate it
 if [[ ! -e $virtualenv_activate ]]
@@ -22,6 +23,5 @@ fi
 
 if [[ -e "./setup.py" ]]
 then
-  python setup.py install
   python setup.py tag --${RELEASE_TYPE} register -r ${PYPI_NAME} sdist bdist_egg bdist_wheel upload -r ${PYPI_NAME}
 fi
