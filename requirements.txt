@@ -1,4 +1,4 @@
-pbr>=0.11.0.dev33.g572e59e
+pbr
 six
 decorator
 pathlib
