@@ -1,3 +1,14 @@
+#!/bin/bash
+venv_name=.virtualenv_release
+virtualenv_activate=./${venv_name}/bin/activate
+
+# Validate the virtualenv and activate it
+if [[ ! -e $virtualenv_activate ]]
+then
+  virtualenv $venv_name
+fi
+. ${virtualenv_activate}
+
 if [[ "${RELEASE_TYPE}" == "" ]]
 then 
   RELEASE_TYPE=patch
@@ -7,4 +18,8 @@ then
   PYPI_NAME=rocktaviouspypi
 fi
 
-python setup.py tag --${RELEASE_TYPE} register -r ${PYPI_NAME} sdist bdist_egg bdist_wheel upload -r ${PYPI_NAME}
+if [[ -e "./setup.py" ]]
+then
+  python setup.py install
+  python setup.py tag --${RELEASE_TYPE} register -r ${PYPI_NAME} sdist bdist_egg bdist_wheel upload -r ${PYPI_NAME}
+fi
