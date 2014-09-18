@@ -9,6 +9,8 @@ then
 fi
 . ${virtualenv_activate}
 
+pip install wheel
+
 if [[ "${RELEASE_TYPE}" == "" ]]
 then 
   RELEASE_TYPE=patch
