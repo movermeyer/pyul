@@ -7,7 +7,7 @@ try:
     setup(**util.cfg_to_args())
 except ImportError:
     #If PBR isn't installed, then install it from the local egg and redo the python setup.py call
-    call(['easy_install ./pbr-0.11.0.dev32.g9f160d5-py2.7.egg'], shell=True)
+    call(['easy_install ./pbr-0.11.0.dev33.g572e59e-py2.7.egg'], shell=True)
     call([' '.join(['python'] + sys.argv)], shell=True)
 
 
