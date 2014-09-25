@@ -17,7 +17,7 @@ then
 fi
 if [[ "${PYPI_NAME}" == "" ]]
 then 
-  PYPI_NAME=rocktaviouspypi
+  PYPI_NAME=pypi
 fi
 
 if [[ -e "./setup.py" ]]

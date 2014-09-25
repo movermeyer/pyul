@@ -22,7 +22,7 @@ Usage
 
 Design
 ------
-The Python Utility Library was designed to handle alot of bolier plate code, to free you up to design tools/scripts/applications without having to implement wrapper utilities for common functionality.
+The Python Utility Library was designed as loose set of utility classes and functions to handle alot of bolier plate code common to many projects needs.  They are usually small (code to read), easy to use and limited in the functionality they provide to free you up to design tools/scripts/applications without having to implement common functionality.
 
 Documentation
 -------------

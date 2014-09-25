@@ -16,6 +16,10 @@ CODETIMEFORMAT = "%Y-%m-%d_%H:%M:%S"
 VERBOSE = logging.Formatter('[%(levelname)s]%(asctime)s | [%(name)s][%(module)s][%(funcName)s][line:%(lineno)s] \n\t %(message)s', HUMANTIMEFORMAT)
 SIMPLE = logging.Formatter('[%(levelname)s] %(message)s')
 
+def deprecation(msg):
+    """Prints a deprecation message."""
+    warnings.warn(msg, category=DeprecationWarning, stacklevel=2)
+
 #------------------------------------------------------------
 def addHandler(handler):
     logger = logging.getLogger()

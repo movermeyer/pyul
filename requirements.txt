@@ -5,3 +5,4 @@ pathlib
 unittest2
 pyyaml
 enum34
+ctypes

@@ -10,13 +10,13 @@ from decorator import decorator
 from pyul import loggingUtils, threadUtils, coreUtils
 from pyul.support import Path
 
-__all__ = ['depreciated','cementArgFiller',
+__all__ = ['deprecated','cementArgFiller',
            'PreAndPost','Safe',
            'Timer','Profile',
            'CommandTicker']
 
 @decorator
-def depreciated(f, *args, **kw):
+def deprecated(f, *args, **kw):
     warnings.warn_explicit(
         "Call to deprecated function {}.".format(f.__name__),
         category=DeprecationWarning,

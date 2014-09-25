@@ -1,6 +1,8 @@
+from __future__ import absolute_import
 import os
+import sys
 from enum import Enum
-from sys import platform as _sys_platform
+import platform as _platform
 from .coreUtils import Singleton
 
 __all__ = ['Platforms', 'Platform', 'platform']
@@ -31,7 +33,7 @@ class Platform(object):
     def __repr__(self):
         return '\'{platform}\' - {instance}'.format(
             platform=self._get_platform().name,
-            instance=_sys_platform.__repr__()
+            instance=sys.platform.__repr__()
         )
 
     def _get_platform(self):
@@ -43,18 +45,36 @@ class Platform(object):
         if self._platform_ios is None:
             self._platform_ios = 'IOS_ARGUMENT' in os.environ
 
-        # On android, _sys_platform return 'linux2', so prefer to check the
-        # import of Android module than trying to rely on _sys_platform.
+        # On android, sys.platform return 'linux2', so prefer to check the
+        # import of Android module than trying to rely on sys.platform.
         if self._platform_android is True:
             return Platforms.android
-        elif self._platform_ios is True:
+        if self._platform_ios is True:
             return Platforms.ios
-        elif _sys_platform in ('win32', 'cygwin'):
+        if sys.platform in ('win32', 'cygwin'):
             return Platforms.windows
-        elif _sys_platform == 'darwin':
+        if sys.platform == 'darwin':
             return Platforms.macosx
-        elif _sys_platform[:5] == 'linux':
+        if sys.platform[:5] == 'linux':
             return Platforms.linux
         return Platforms.unknown
+    
+    @property
+    def name(self):
+        platform = self._get_platform()
+        if platform == Platforms.linux:
+            return '-'.join(_platform.linux_distribution()[:2])
+        if platform == Platforms.macosx:
+            return '-'.join(['MacOS', _platform.mac_ver()[0], _platform.mac_ver()[-1]])
+        if platform == Platforms.windows:
+            return '-'.join(['Windows', _platform.win32_ver()[0]])
+        return Platforms.unknown
+    
+    def is_64bit():
+        """Checks, if the platform is a 64-bit machine."""
+        is64bit = sys.maxsize > 2 ** 32
+        if sys.platform == "cli":
+            is64bit = sys.executable.endswith("ipy64.exe")
+        return is64bit
 
 platform = Platform()
