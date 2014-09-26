@@ -1,15 +1,8 @@
 #!/bin/bash
-venv_name=.virtualenv_release
-virtualenv_activate=./${venv_name}/bin/activate
-
-# Validate the virtualenv and activate it
-if [[ ! -e $virtualenv_activate ]]
-then
-  virtualenv $venv_name
-fi
-. ${virtualenv_activate}
-
-pip install wheel
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+. $DIR/clean.sh
+. $DIR/configure.sh
+. $DIR/virtualenv.sh
 
 if [[ "${PBR_RELEASE_TYPE}" == "" ]]
 then 
