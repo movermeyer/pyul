@@ -1,11 +1,12 @@
 from __future__ import absolute_import
 import os
 import sys
+import six
 from enum import Enum
 import platform as _platform
 from .coreUtils import Singleton
 
-__all__ = ['Platforms', 'Platform', 'platform']
+__all__ = ['Platforms', 'platform']
 
 class Platforms(Enum):
     unknown = 1
@@ -15,8 +16,8 @@ class Platforms(Enum):
     android = 5
     ios = 6
 
+@six.add_metaclass(Singleton)
 class Platform(object):
-    __metaclass__ = Singleton
     _platform_android = None
     _platform_ios = None
     
@@ -31,10 +32,13 @@ class Platform(object):
         return self._get_platform().name
 
     def __repr__(self):
-        return '\'{platform}\' - {instance}'.format(
-            platform=self._get_platform().name,
-            instance=sys.platform.__repr__()
+        return '<platform name: \'{platform}\' from: \n{instance}>'.format(
+            platform=self._get_platform(),
+            instance=super(Platform, self).__repr__()
         )
+
+    def __hash__(self):
+        return self._get_platform().__hash__()
 
     def _get_platform(self):
         if self._platform_android is None:
@@ -68,7 +72,7 @@ class Platform(object):
             return '-'.join(['MacOS', _platform.mac_ver()[0], _platform.mac_ver()[-1]])
         if platform == Platforms.windows:
             return '-'.join(['Windows', _platform.win32_ver()[0]])
-        return Platforms.unknown
+        return Platforms.unknown.name
     
     def is_64bit():
         """Checks, if the platform is a 64-bit machine."""
