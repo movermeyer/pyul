@@ -11,9 +11,9 @@ fi
 
 pip install wheel
 
-if [[ "${RELEASE_TYPE}" == "" ]]
+if [[ "${PBR_RELEASE_TYPE}" == "" ]]
 then 
-  RELEASE_TYPE=patch
+  PBR_RELEASE_TYPE=patch
 fi
 if [[ "${PYPI_NAME}" == "" ]]
 then 
@@ -22,5 +22,5 @@ fi
 
 if [[ -e "./setup.py" ]]
 then
-  python setup.py tag --${RELEASE_TYPE} register -r ${PYPI_NAME} sdist bdist_egg bdist_wheel upload -r ${PYPI_NAME}
+  python setup.py tag --${PBR_RELEASE_TYPE} register -r ${PYPI_NAME} sdist bdist_egg bdist_wheel upload -r ${PYPI_NAME}
 fi
