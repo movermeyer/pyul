@@ -1,4 +1,5 @@
-pbr>=0.11.0.dev42.gb98411a
+pyversion
+pbr
 six
 decorator
 pathlib

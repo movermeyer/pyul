@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 __import__('pkg_resources').declare_namespace(__name__)
-from pyul.version import version_info
+from version import Version
 
 #TODO: This information is duplicated by setup.cfg and is a bad practice
 #but is currently here for sphinx documentation and i can figure out 
@@ -10,4 +10,4 @@ __doc__ = "Python Utility Library - A library of utilities for python developmen
 __author__ = "Kyle Rockman"
 __license__ = "MIT"
 __copyright__ = "2014 Kyle Rockman"
-__version__ = version_info.version
+__version__ = Version(__project__)
