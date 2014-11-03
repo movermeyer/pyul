@@ -16,7 +16,7 @@ class MetaMixin(object):
         # Meta on them, and then merge them together in order of MRO
         metas = reversed([x.Meta for x in self.__class__.mro()
                           if hasattr(x, "Meta")])
-        final_meta = {}
+        final_meta = DotifyDict()
 
         # Merge the Meta classes into one dict
         for meta in metas:

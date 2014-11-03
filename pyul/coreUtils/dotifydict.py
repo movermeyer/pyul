@@ -54,13 +54,20 @@ class DotifyDict(dict):
         except KeyError:
             return default
         
-    def update(self, u):
-        for k, v in u.iteritems():
-            if isinstance(v, DotifyDict):
-                d = getattr(self, k)
-                self[k] = d.update(v)
-            else:
-                self[k] = u[k]
+    def update(self, other):
+        for k, v in other.iteritems():
+            try:
+                if isinstance(v, DotifyDict):
+                    d = getattr(self, k)
+                    self[k] = d.update(v)
+                elif isinstance(v, list):
+                    self[k].extend(other[k])
+                elif isinstance(v, set):
+                    self[k].update(other[k])
+                else:
+                    self[k] = other[k]
+            except AttributeError:
+                self[k] = other[k]
         return self
     
     def set_default(self, key, default):
