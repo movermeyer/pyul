@@ -1,7 +1,11 @@
 import os
 from setuptools import setup
-from pbr import util
-import pyul 
 
-os.environ['PBR_VERSION'] = pyul.__version__
-setup(**util.cfg_to_args())
+setup(
+    setup_requires=[
+        'pbr',
+        'pyversion>=0.3.0'
+    ],
+    pbr=True,
+    auto_version="PBR",
+)
