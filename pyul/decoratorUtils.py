@@ -45,8 +45,8 @@ def cementArgFiller(f, *args, **kw):
     compiled_kwds.update(dict(zip(args_to_fill, args_to_fill_vals)))
     return f(**compiled_kwds)
 
-@six.withmetaclass(loggingUtils.LoggingMetaclass)
-class PreAndPost(object):
+
+class PreAndPost(six.with_metaclass(loggingUtils.LoggingMetaclass)):
     
     def __init__(self, func):
         self.func = func
