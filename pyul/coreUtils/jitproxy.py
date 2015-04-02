@@ -2,6 +2,7 @@ from .event import Event
 
 __all__ = ['JITProxy']
 
+
 class JITProxy(object):
     """
     A 'just-in-time' proxying wrapper class.  Aids in instanciating classes who's init
@@ -9,7 +10,7 @@ class JITProxy(object):
     that time to directly when the class if first used
     """
     __slots__ = ["_obj", "_klass", "_args", "_kwds", "__weakref__"]
-    
+
     @staticmethod
     def initObj(obj):
         oga = object.__getattribute__
@@ -18,7 +19,7 @@ class JITProxy(object):
                                oga(obj, "_klass")(*oga(obj, "_args"),
                                                   **oga(obj, "_kwds")))
             oga(obj, "_on_init")(oga(obj, "_obj"))
-    
+
     def __init__(self, klass, *args, **kwds):
         """
         :param klass: Class of objet to be instantiated just in time
@@ -30,7 +31,7 @@ class JITProxy(object):
         object.__setattr__(self, "_kwds", kwds)
         object.__setattr__(self, "_obj", None)
         object.__setattr__(self, "_on_init", Event())
-    
+
     #
     # proxying (special cases)
     #
@@ -40,28 +41,33 @@ class JITProxy(object):
         else:
             JITProxy.initObj(self)
             return getattr(object.__getattribute__(self, "_obj"), name)
+
     def __getattr__(self, name):
         JITProxy.initObj(self)
         return getattr(object.__getattribute__(self, "_obj"), name)
+
     def __delattr__(self, name):
         delattr(object.__getattribute__(self, "_obj"), name)
+
     def __setattr__(self, name, value):
         if name == '_on_init' and object.__getattribute__(self, "_obj") is None:
             return setattr(object.__getattribute__(self, "_on_init"), name, value)
         else:        
             JITProxy.initObj(self)
             setattr(object.__getattribute__(self, "_obj"), name, value)
-    
+
     def __nonzero__(self):
         JITProxy.initObj(self)
         return bool(object.__getattribute__(self, "_obj"))
+
     def __str__(self):
         JITProxy.initObj(self)
         return str(object.__getattribute__(self, "_obj"))
+
     def __repr__(self):
         JITProxy.initObj(self)
         return repr(object.__getattribute__(self, "_obj"))
-    
+
     #
     # factories
     #
@@ -81,22 +87,22 @@ class JITProxy(object):
         '__rtruediv__', '__rxor__', '__setitem__', '__setslice__', '__sub__', 
         '__truediv__', '__xor__', 'next',
     ]
-    
+
     @classmethod
     def _create_class_proxy(cls, theclass):
         """creates a proxy for the given class"""
-        
+
         def make_method(name):
             def method(self, *args, **kw):
                 return getattr(object.__getattribute__(self, "_obj"), name)(*args, **kw)
             return method
-        
+
         namespace = {}
         for name in cls._special_names:
             if hasattr(theclass, name):
                 namespace[name] = make_method(name)
         return type("%s(%s)" % (cls.__name__, theclass.__name__), (cls,), namespace)
-    
+
     def __new__(cls, obj, *args, **kwargs):
         """
         creates an proxy instance referencing `obj`. (obj, *args, **kwargs) are

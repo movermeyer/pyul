@@ -23,7 +23,6 @@ import logging
 import re
 import fnmatch
 import glob
-
 import errno
 
 __all__ = ['Path']

@@ -9,6 +9,7 @@ are separately stored. For each individual component type a processing
 system will take care of all necessary updates for the World
 environment.
 """
+import six
 import uuid
 import inspect
 
@@ -50,7 +51,7 @@ class Entity(object):
         try:
             ctype = self._world._componenttypes[name]
         except KeyError:
-            raise AttributeError("object '%r' has no attribute '%r'" % \
+            raise AttributeError("object '%r' has no attribute '%r'" %
                 (self.__class__.__name__, name))
         return self._world.components[ctype][self]
 
@@ -81,7 +82,7 @@ class Entity(object):
         try:
             ctype = self._world._componenttypes[name]
         except KeyError:
-            raise AttributeError("object '%s' has no attribute '%s'" % \
+            raise AttributeError("object '%s' has no attribute '%s'" %
                 (self.__class__.__name__, name))
         del self._world.components[ctype][self]
 
@@ -128,7 +129,7 @@ class World(object):
         a processing system.
         """
         return hasattr(system, "componenttypes") and \
-            isiterable(system.componenttypes) and \
+            six.isiterable(system.componenttypes) and \
             hasattr(system, "process") and \
             callable(system.process)
 

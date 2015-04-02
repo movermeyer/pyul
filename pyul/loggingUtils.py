@@ -16,45 +16,41 @@ CODETIMEFORMAT = "%Y-%m-%d_%H:%M:%S"
 VERBOSE = logging.Formatter('[%(levelname)s]%(asctime)s | [%(name)s][%(module)s][%(funcName)s][line:%(lineno)s] \n\t %(message)s', HUMANTIMEFORMAT)
 SIMPLE = logging.Formatter('[%(levelname)s] %(message)s')
 
+
 def deprecation(msg):
     """Prints a deprecation message."""
     warnings.warn(msg, category=DeprecationWarning, stacklevel=2)
 
-#------------------------------------------------------------
+
 def addHandler(handler):
     logger = logging.getLogger()
     logger.addHandler(handler)
-    
-#------------------------------------------------------------
+
+
 def setupFileHandler(filepath, level=None, formatter=None):
     level = level or logging.INFO
     formatter = formatter or VERBOSE
-    
     kwargs = dict(maxBytes = 1024*1024, backupCount=64, delay=True)
     handler = SafeRotatingFileHandler(filepath, **kwargs)
     handler.setFormatter(formatter)
     handler.setLevel(level)
-    
     addHandler(handler)
 
-#------------------------------------------------------------
+
 def setupDatabaseHandler(filepath, level=None):
     level = level or logging.WARNING
-    
     handler = SQLiteHandler(filepath)
     handler.setLevel(level)
     addHandler(handler)
 
-#------------------------------------------------------------
+
 def setupStreamHandler(level=None, formatter=None, stream=None):
     logging.basicConfig(level=logging.DEBUG,
                         format=SIMPLE._fmt,
                         datefmt=HUMANTIMEFORMAT,
                         stream=sys.stdout)
-        
 
-#------------------------------------------------------------
-#------------------------------------------------------------
+
 class LoggingMetaclass(type):
     """
     Metaclass for Logging, will add self.log to the class
@@ -65,8 +61,6 @@ class LoggingMetaclass(type):
         cls.log = logging.getLogger(cls.__module__)
 
 
-#------------------------------------------------------------
-#------------------------------------------------------------
 class SQLiteHandler(logging.Handler):
     """
     Logging handler for SQLite.
@@ -128,28 +122,21 @@ class SQLiteHandler(logging.Handler):
                    );
                    """
 
-    #------------------------------------------------------------
     def __init__(self, db=None):
-
         logging.Handler.__init__(self)
         if db is None:
             self.db = ':memory:Temp.db'
         else:
-            self.db = str(Path(db))
-            #self.db.makedirs()
-            
+            self.db = str(Path(db))            
         # Create table if needed:
         conn = sqlite3.connect(self.db)
         conn.execute(SQLiteHandler.initial_sql)
         conn.commit()
 
-    #------------------------------------------------------------
     def formatDBTime(self, record):
         record.dbtime = time.strftime(CODETIMEFORMAT, time.localtime(record.created))
 
-    #------------------------------------------------------------
     def emit(self, record):
-
         # Use default formatting:
         self.format(record)
         # Set the database time up:
@@ -165,32 +152,26 @@ class SQLiteHandler(logging.Handler):
         conn.commit()
 
 
-
-#------------------------------------------------------------
-#------------------------------------------------------------
 class SafeRotatingFileHandler (logging.handlers.RotatingFileHandler):
     """
     RotatingFileHandler that works even if log file is locked.
     When we try to rename the file it fails until that subprocess complete.
     So, wait for a while before you rotate.
     """
-    #------------------------------------------------------------
+    
     def __init__(self, *pargs, **kwargs):
         self._lock = threading.Lock()
         logging.handlers.RotatingFileHandler.__init__(self, *pargs, **kwargs)
 
-    #------------------------------------------------------------
     def emit(self, record):
         with self._lock:
             return logging.handlers.RotatingFileHandler.emit(self, record)
 
-    #------------------------------------------------------------
     def doRollover(self):
         """
         Do a rollover, as described in __init__().
         """
         name = threading.current_thread().name
-        #------------------------------------------------------------
         def rename (sfn, dfn):
             for i in range(20):
                 if os.path.exists(dfn):
@@ -200,7 +181,6 @@ class SafeRotatingFileHandler (logging.handlers.RotatingFileHandler):
                     break
                 except:
                     time.sleep(0.5)
-
         if self.stream:
             self.stream.close()
             self.stream = None
@@ -215,4 +195,3 @@ class SafeRotatingFileHandler (logging.handlers.RotatingFileHandler):
             rename (self.baseFilename, dfn)
         self.mode = 'w'
         self.stream = self._open()
-

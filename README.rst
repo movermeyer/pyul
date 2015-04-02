@@ -1,4 +1,4 @@
-|Status|_ |Badge|_ |Downloads|_
+|Badge|_ |Downloads|_
 
 .. |Badge| image:: https://pypip.in/v/pyul/badge.png
 .. _Badge: https://crate.io/packages/pyul/
@@ -21,6 +21,3 @@ Usage
 Design
 ------
 The Python Utility Library was designed as loose set of utility classes and functions to handle alot of bolier plate code common to many projects needs.  They are usually small (code to read), easy to use and limited in the functionality they provide to free you up to design tools/scripts/applications without having to implement common functionality.
-
-Documentation
--------------

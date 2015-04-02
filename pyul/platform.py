@@ -8,6 +8,7 @@ from .coreUtils import Singleton
 
 __all__ = ['Platforms', 'platform']
 
+
 class Platforms(Enum):
     unknown = 1
     windows = 2
@@ -16,11 +17,11 @@ class Platforms(Enum):
     android = 5
     ios = 6
 
+
 @six.add_metaclass(Singleton)
 class Platform(object):
     _platform_android = None
     _platform_ios = None
-    
 
     def __eq__(self, other):
         return other == self._get_platform()
@@ -45,10 +46,8 @@ class Platform(object):
             # ANDROID_ARGUMENT and ANDROID_PRIVATE are 2 environment variables
             # from python-for-android project
             self._platform_android = 'ANDROID_ARGUMENT' in os.environ
-
         if self._platform_ios is None:
             self._platform_ios = 'IOS_ARGUMENT' in os.environ
-
         # On android, sys.platform return 'linux2', so prefer to check the
         # import of Android module than trying to rely on sys.platform.
         if self._platform_android is True:
@@ -62,7 +61,7 @@ class Platform(object):
         if sys.platform[:5] == 'linux':
             return Platforms.linux
         return Platforms.unknown
-    
+
     @property
     def name(self):
         platform = self._get_platform()
@@ -73,12 +72,13 @@ class Platform(object):
         if platform == Platforms.windows:
             return '-'.join(['Windows', _platform.win32_ver()[0]])
         return Platforms.unknown.name
-    
+
     def is_64bit():
         """Checks, if the platform is a 64-bit machine."""
         is64bit = sys.maxsize > 2 ** 32
         if sys.platform == "cli":
             is64bit = sys.executable.endswith("ipy64.exe")
         return is64bit
+
 
 platform = Platform()

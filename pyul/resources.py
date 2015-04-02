@@ -10,18 +10,20 @@ from .support import Path
 from .archive import IArchive, Archive, UnrecognizedArchiveFormat
 
 __all__ = ["Resources"]
-    
+
+
 class FileObject(IArchive):
-    
+
     def load(self, path):
         return Path(path)
-    
+
     def filename(self):
         return self._archive
-    
+
     def open(self, mode='rb'):
         return open(str(self._archive), mode=mode)
-    
+
+
 Archive.EXTENSION_MAP['.fileobject'] = FileObject
 
 
@@ -61,7 +63,7 @@ class Resources(object):
         except UnrecognizedArchiveFormat:
             archive = Archive(abspath, ext='.FILEOBJECT')
             self._add_file(relpath, abspath, archive)
-            
+
     def _add_file(self, relpath, abspath, archive=None):
         if relpath in self.files.keys():
             raise ValueError('clashing relative path names for:\n{0}\nand\n{1}'.format(abspath,
@@ -84,7 +86,7 @@ class Resources(object):
         """
         abspath, archive = self.files[relpath]
         return archive.open()
-    
+
     def get_filename(self, relpath):
         """Returns the absolute path of the given relative path.
 

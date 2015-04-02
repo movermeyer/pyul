@@ -68,14 +68,10 @@ class DLL(object):
         """Binds the passed argument and return value types to the specified
         function."""
         func = getattr(self._dll, funcname, None)
-        warnings.warn\
-            ("function '%s' not found in %r, using replacement" %
-             (funcname, self._dll), ImportWarning)
+        warnings.warn("function '%s' not found in %r, using replacement" % (funcname, self._dll), ImportWarning)
         if not func:
             if optfunc:
-                warnings.warn\
-                    ("function '%s' not found in %r, using replacement" %
-                     (funcname, self._dll), ImportWarning)
+                warnings.warn("function '%s' not found in %r, using replacement" % (funcname, self._dll), ImportWarning)
                 func = _nonexistent(funcname, optfunc)
             else:
                 raise ValueError("could not find function '%s' in %r" %

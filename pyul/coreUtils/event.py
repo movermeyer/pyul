@@ -1,5 +1,6 @@
 __all__ = ['Event','EventDispatcher']
 
+
 class Event(object):
     def __init__(self):
         self.handlers = list()
@@ -26,15 +27,16 @@ class Event(object):
     __isub__ = unhandle
     __call__ = fire
     __len__  = getHandlerCount
-    
+
+
 class EventDispatcher(object):
-    
+
     __events__ = []
-    
+
     def __init__(self):
         for event in self.__events__ :
             self.add_event(event)
-            
+
     def add_event(self, event_name):
         new_event = Event()
         if hasattr(self, event_name):

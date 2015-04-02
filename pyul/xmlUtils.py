@@ -26,18 +26,15 @@ except NameError:
 __all__ = ['parseToDict','unparseFromDict',
            'removeWhitespaceNodes']
 
-#------------------------------------------------------------
-#------------------------------------------------------------
+
 class ParsingInterrupted(Exception): pass
 
 
-#------------------------------------------------------------
-#------------------------------------------------------------
 class _DictSAXHandler(object):
     """Written by: Martin Blech  -  Integrated by: Kyle Rockman"""
     def __init__(self,
                  item_depth=0,
-                 item_callback=lambda *args: True,
+                 item_callback=(lambda *args: True),
                  xml_attribs=True,
                  attr_prefix='@',
                  cdata_key='#text',
@@ -60,8 +57,7 @@ class _DictSAXHandler(object):
         self.postprocessor = postprocessor
         self.dict_constructor = dict_constructor
         self.strip_whitespace = strip_whitespace
-    
-    #------------------------------------------------------------
+
     def startElement(self, name, attrs):
         attrs = self.dict_constructor(zip(attrs[0::2], attrs[1::2]))
         self.path.append((name, attrs or None))
@@ -75,8 +71,7 @@ class _DictSAXHandler(object):
                 attrs = None
             self.item = attrs or None
             self.data = None
-    
-    #------------------------------------------------------------
+
     def endElement(self, name):
         if len(self.path) == self.item_depth:
             item = self.item
@@ -101,15 +96,13 @@ class _DictSAXHandler(object):
         else:
             self.item = self.data = None
         self.path.pop()
-    
-    #------------------------------------------------------------
+
     def characters(self, data):
         if not self.data:
             self.data = data
         else:
             self.data += self.cdata_separator + data
-    
-    #------------------------------------------------------------
+
     def push_data(self, item, key, data):
         if self.postprocessor is not None:
             result = self.postprocessor(self.path, key, data)
@@ -127,6 +120,7 @@ class _DictSAXHandler(object):
         except KeyError:
             item[key] = data
         return item
+
 
 def _emit(key, value, content_handler,
           attr_prefix='@',
@@ -168,6 +162,7 @@ def _emit(key, value, content_handler,
             content_handler.characters(cdata)
         content_handler.endElement(key)
 
+
 def parseToDict(data):
     handler = _DictSAXHandler()
     parser = expat.ParserCreate()
@@ -183,6 +178,7 @@ def parseToDict(data):
         parser.Parse(data, True)
     return handler.item
 
+
 def unparseFromDict(data):
     ((key, value),) = data.items()
     output = StringIO()
@@ -196,6 +192,7 @@ def unparseFromDict(data):
     except AttributeError:
         pass
     return parseString(value).toprettyxml(indent="\t")
+
 
 def removeWhitespaceNodes(node, unlink=False):
     """Removes all of the whitespace-only text decendants of a DOM node.
