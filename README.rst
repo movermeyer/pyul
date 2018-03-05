@@ -1,8 +1,8 @@
 |Badge|_ |Downloads|_
 
-.. |Badge| image:: https://pypip.in/v/pyul/badge.png
+.. |Badge| image:: https://img.shields.io/pypi/v/pyul.svg
 .. _Badge: https://crate.io/packages/pyul/
-.. |Downloads| image:: https://pypip.in/d/pyul/badge.png
+.. |Downloads| image:: https://img.shields.io/pypi/dm/pyul.svg
 .. _Downloads: https://crate.io/packages/pyul/
 
 pyul
